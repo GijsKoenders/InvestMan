@@ -1,3 +1,5 @@
+#FINDS EVERYTHING OPPOSSING TO ONLY RELEVANT INFORMATION
+
 #api bitmex.com
 #bitmex.com
 
