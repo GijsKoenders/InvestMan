@@ -1,67 +1,128 @@
 #https://www.devdungeon.com/content/gui-programming-python#further-reading
 #https://medium.com/@elan_73479/python-tkinter-tutorial-2-making-a-very-simple-login-889295115981
+#https://www.youtube.com/watch?v=eJRLftYo9A0&index=8&list=PLQVvvaa0QuDclKx-QpC9wntnURXVJqLyk
+#LIVEGRAPH DATA WITH BTC
 
 """CREATE INVESTMAN"""
 #Initialize InvestMan
-from tkinter import Tk, Menu, Label, Button, LEFT, Y, ttk, Entry
-root = Tk()
+import matplotlib
+
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+import matplotlib.animation as animation
+from matplotlib import style
+
+import tkinter as tk 
+from tkinter import ttk
+
+matplotlib.use("TkAgg")
+style.use("ggplot")
 
 """CREATE POPUP"""
 #Title of the popup
-root.title("InvestMan")
 
-#Grab the users' screenwidth and height for possible use
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-root.geometry("700x500+50+50")
 
 
 """MAIN MENU"""
-#Create main menu bar
-menu_bar = Menu(root)
 
-# Create the submenu
-file_menu = Menu(menu_bar, tearoff=0)
-highscores_menu = Menu(menu_bar, tearoff=0)
+f = Figure(figsize=(5,5), dpi=100)
+a = f.add_subplot(111)
 
-# Add commands to submenu
-file_menu.add_command(label="Login", command=root.destroy)
-file_menu.add_command(label="Quit!", command=root.destroy)
-
-# Add the "File" drop down sub-menu in the main menu bar
-menu_bar.add_cascade(label="File", menu=file_menu)
-menu_bar.add_cascade(label="Highscores", menu=highscores_menu)
-
-"""DEFINITONS"""
-
-
-def login(us1,pw1,usr,pword):
-    if us1 == usr and pw1==pword:
-       i=Label(gui,text='Login success').grid(row=6,column=0)
-       print("login success")
-    else:
-       print("wrong password")
-       j=Label(gui,text='Login failed').grid(row=6,column=0)
-
-"""LOGINPAGE"""
-#Text for LoginMenu
-gui = Tk()
-Entry(gui)
-
-a = Label(gui ,text="username").grid(row=0,column = 0)
-b = Label(gui ,text="password").grid(row=1,column=0)
-e = Entry(gui).grid(row=0,column=1)
-f = Entry(gui,show="*").grid(row=1,column=1)
-c = Button(gui, text="Create account").grid(row=2,column=0)
-
-a1 = Label(gui ,text="username").grid(row=3,column = 0)
-b1 = Label(gui ,text="password").grid(row=4,column=0)
-e1 = Entry(gui).grid(row=3,column=1)
-f1 = Entry(gui,show="*").grid(row=4,column=1)
-
-c1 = Button(gui, text="LOGIN",command=lambda : login(e,f,e1,f1)).grid(row=5,column=1)
+"""DEFINITIONS"""
+def animate(i):
+    pullData = open("sampleData.txt","r").read()
+    dataList = pullData.split('\n')
+    xList = []
+    yList = []
+    for eachLine in dataList:
+        if len(eachLine) > 1:
+            x, y = eachLine.split(',')
+            xList.append(int(x))
+            yList.append(int(y))
+    a.clear()
+    a.plot(xList, yList)
+            
+            
 
 
-root.config(menu=menu_bar)
-gui.mainloop()
-root.mainloop()
+"""Frames"""
+
+class root(tk.Tk):
+        
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        
+        tk.Tk.wm_title(self, "InvestMan")
+        
+        container = tk.Frame(self)
+        container.pack()
+        
+        self.frames = {}
+        for F in (StartPage, PageOne, PageTwo):        
+            frame = F(container, self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+        self.show_frame(StartPage)
+    
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+        
+        
+class StartPage(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text= "Start Page")
+        label.pack(pady=10, padx=10)
+        
+        button = ttk.Button(self, text= "Visit Page 1", command=lambda:controller.show_frame(PageOne))
+        button.pack()
+        
+        button = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(PageTwo))
+        button.pack()
+    
+        
+class PageOne(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text= "Page One")
+        label.pack(pady=10, padx=10)
+        
+        button1 = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(PageTwo))
+        button1.pack()
+        
+        button1 = ttk.Button(self, text= "Back to Home", command=lambda:controller.show_frame(StartPage))
+        button1.pack() 
+        
+        
+class PageTwo(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text= "Page Two")
+        label.pack(pady=10, padx=10)
+        
+        button2 = ttk.Button(self, text= "Visit Page 1", command=lambda:controller.show_frame(PageOne))
+        button2.pack()
+        
+        button2 = ttk.Button(self, text= "Back to Home", command=lambda:controller.show_frame(StartPage))
+        button2.pack() 
+        
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+        
+        toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+        
+        
+
+app = root()
+ani = animation.FuncAnimation(f, animate, interval=1000)
+app.mainloop()
+
+
+
