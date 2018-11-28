@@ -5,8 +5,8 @@
 
 """CREATE INVESTMAN"""
 #Initialize InvestMan
-import matplotlib
 
+import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
@@ -15,7 +15,16 @@ from matplotlib import style
 import tkinter as tk 
 from tkinter import ttk
 
-matplotlib.use("TkAgg")
+import urllib
+import json
+
+import pandas as pd
+import numpy as np
+
+LARGE_FONT = ("Verdana", 14)
+MEDIUM_FONT = ("Verdana", 12)
+SMALL_FONT = ("Verdana", 8)
+
 style.use("ggplot")
 
 """CREATE POPUP"""
@@ -25,23 +34,23 @@ style.use("ggplot")
 
 """MAIN MENU"""
 
-f = Figure(figsize=(5,5), dpi=100)
+f = Figure()
 a = f.add_subplot(111)
 
-"""DEFINITIONS"""
-def animate(i):
-    pullData = open("sampleData.txt","r").read()
-    dataList = pullData.split('\n')
-    xList = []
-    yList = []
-    for eachLine in dataList:
-        if len(eachLine) > 1:
-            x, y = eachLine.split(',')
-            xList.append(int(x))
-            yList.append(int(y))
-    a.clear()
-    a.plot(xList, yList)
-            
+"""DEFINITIONS"""  
+
+
+def popupmsg(msg):
+    popup = tk.TK()
+    
+    popup.wm_title("!")
+    label = ttk.Label(popup, text=msg, font=MEDIUM_FONT)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Okay", command = popup.destoy)
+    B1.pacl()
+    popup.mainloop
+    
+    
             
 
 
@@ -57,8 +66,22 @@ class root(tk.Tk):
         container = tk.Frame(self)
         container.pack()
         
+        menubar = tk.Menu(container)
+        filemenu = tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Save settings", command=lambda: popupmsg("Not supported just yet!"))
+        filemenu.add_separator
+        filemenu.add_command(label="Exit", command=quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+        
+        Crypto = tk.Menu(menubar, tearoff=0)
+        Crypto.add_command(label="Bitcoin")
+        Crypto.add_command(label="Ripple")
+        Crypto.add_command(label="Ethereum")
+        
+        tk.Tk.config(self, menu=menubar)
+        
         self.frames = {}
-        for F in (StartPage, PageOne, PageTwo):        
+        for F in (StartPage, PageOne, BTCe_Page):        
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -73,13 +96,13 @@ class StartPage(tk.Frame):
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text= "Start Page")
+        label = tk.Label(self, text= "ALPHA InvestMan")
         label.pack(pady=10, padx=10)
         
-        button = ttk.Button(self, text= "Visit Page 1", command=lambda:controller.show_frame(PageOne))
-        button.pack()
+        button1 = ttk.Button(self, text= "Visit Page 1", command=lambda:controller.show_frame(PageOne))
+        button1.pack()
         
-        button = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(PageTwo))
+        button = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(BTCe_Page))
         button.pack()
     
         
@@ -90,14 +113,14 @@ class PageOne(tk.Frame):
         label = tk.Label(self, text= "Page One")
         label.pack(pady=10, padx=10)
         
-        button1 = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(PageTwo))
+        button1 = ttk.Button(self, text= "Visit Page 2", command=lambda:controller.show_frame(BTCe_Page))
         button1.pack()
         
         button1 = ttk.Button(self, text= "Back to Home", command=lambda:controller.show_frame(StartPage))
         button1.pack() 
         
         
-class PageTwo(tk.Frame):
+class BTCe_Page(tk.Frame):
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -111,7 +134,7 @@ class PageTwo(tk.Frame):
         button2.pack() 
         
         canvas = FigureCanvasTkAgg(f, self)
-        canvas.show()
+        canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
         
         toolbar = NavigationToolbar2Tk(canvas, self)
@@ -121,7 +144,8 @@ class PageTwo(tk.Frame):
         
 
 app = root()
-ani = animation.FuncAnimation(f, animate, interval=1000)
+app.geometry("800x600")
+ani = animation.FuncAnimation(f, interval=1000)
 app.mainloop()
 
 
