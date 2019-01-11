@@ -157,7 +157,7 @@ def webscraper():
             if substratum_list[-1] > substratum_list[-2]:
                 axes4.plot(substratum_historic, color = "#00870b")
             elif substratum_list[-1] < substratum_list[-2]:
-                axes4.plot(substratum_historic, color = "#ff0000")    
+                axes4.plot(substratum_historic, color = "#ff0000")
         
         #no scientific notation possible 
         axes1.ticklabel_format(useOffset=False, style='plain')
@@ -187,8 +187,7 @@ def webscraper():
         
         elif allowance == 0 or allowance < 0: 
             print("No new requests possible, wait till the hour has passed to start fresh!")
-            sleep(60)
-        
+            sleep(60)   
     return
 
 webscraper()

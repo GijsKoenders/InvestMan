@@ -38,14 +38,15 @@ def ethereum_minute():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(ethereum_minute_list)
-    axes.plot(ethereum_minute_list_h, "#00870b")
-    axes.plot(ethereum_minute_list_l, "#ff0000")
+    axes.plot(ethereum_minute_list, linewidth =1)
+    axes.plot(ethereum_minute_list_h, "#00870b", linewidth =0.5)
+    axes.plot(ethereum_minute_list_l, "#ff0000", linewidth =0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Ethereum minute chart")
     axes.set_ylabel("Price in dollars")
@@ -80,14 +81,15 @@ def ethereum_fifteen():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(ethereum_fifteen_list)
-    axes.plot(ethereum_minute_list_h, "#00870b")
-    axes.plot(ethereum_minute_list_l, "#ff0000")
+    axes.plot(ethereum_fifteen_list, linewidth =1)
+    axes.plot(ethereum_minute_list_h, "#00870b", linewidth =0.5)
+    axes.plot(ethereum_minute_list_l, "#ff0000", linewidth =0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Ethereum 15 minute chart")
     axes.set_ylabel("Price in dollars")
@@ -122,14 +124,15 @@ def ethereum_hour():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(ethereum_hour_list)
-    axes.plot(ethereum_minute_list_h, "#00870b")
-    axes.plot(ethereum_minute_list_l, "#ff0000")
+    axes.plot(ethereum_hour_list, linewidth =1)
+    axes.plot(ethereum_minute_list_h, "#00870b", linewidth =0.5)
+    axes.plot(ethereum_minute_list_l, "#ff0000", linewidth =0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Ethereum 1 Hour chart")
     axes.set_ylabel("Price in dollars")
@@ -164,14 +167,15 @@ def ethereum_4hour():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(ethereum_4hour_list)
-    axes.plot(ethereum_minute_list_h, "#00870b")
-    axes.plot(ethereum_minute_list_l, "#ff0000")
+    axes.plot(ethereum_4hour_list, linewidth =1)
+    axes.plot(ethereum_minute_list_h, "#00870b", linewidth =0.5)
+    axes.plot(ethereum_minute_list_l, "#ff0000", linewidth =0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Ethereum 4 Hour chart")
     axes.set_ylabel("Price in dollars")

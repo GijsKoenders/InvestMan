@@ -40,14 +40,15 @@ def bitcoin_minute():
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
     
-    axes.plot(bitcoin_minute_list)
-    axes.plot(bitcoin_minute_list_h, "#00870b")
-    axes.plot(bitcoin_minute_list_l, "#ff0000")
+    axes.plot(bitcoin_minute_list, linewidth = 1)
+    axes.plot(bitcoin_minute_list_h, "#00870b", linewidth =0.5)
+    axes.plot(bitcoin_minute_list_l, "#ff0000", linewidth =0.5)
 
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Bitcoin minute chart")
     axes.set_ylabel("Price in dollars")
@@ -81,14 +82,15 @@ def bitcoin_fifteen():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(bitcoin_fifteen_list)
-    axes.plot(bitcoin_fifteen_list_h, "#00870b")
-    axes.plot(bitcoin_fifteen_list_l, "#ff0000")
+    axes.plot(bitcoin_fifteen_list, linewidth = 1)
+    axes.plot(bitcoin_fifteen_list_h, "#00870b", linewidth =0.5)
+    axes.plot(bitcoin_fifteen_list_l, "#ff0000", linewidth =0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
     
     axes.set_title("Bitcoin 15 minute chart")
     axes.set_ylabel("Price in dollars")
@@ -123,14 +125,15 @@ def bitcoin_hour():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(bitcoin_hour_list)
-    axes.plot(bitcoin_hour_list_h, "#00870b")
-    axes.plot(bitcoin_hour_list_l, "#ff0000")
+    axes.plot(bitcoin_hour_list, linewidth = 1)
+    axes.plot(bitcoin_hour_list_h, "#00870b", linewidth = 0.5)
+    axes.plot(bitcoin_hour_list_l, "#ff0000", linewidth = 0.5)
               
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
-    plt.legend(handles=[blue_line, green_line, red_line])          
+    plt.legend(handles=[blue_line, green_line, red_line])   
+    plt.style.use("seaborn-darkgrid")       
     
     axes.set_title("Bitcoin 1 Hour chart")
     axes.set_ylabel("Price in dollars")
@@ -165,14 +168,15 @@ def bitcoin_4hour():
     fig = plt.figure()
     
     axes = fig.add_axes([0.1,0.1,0.8,0.8])
-    axes.plot(bitcoin_4hour_list)
-    axes.plot(bitcoin_4hour_list_h, "#00870b")
-    axes.plot(bitcoin_4hour_list_l, "#ff0000")
+    axes.plot(bitcoin_4hour_list, linewidth =1)
+    axes.plot(bitcoin_4hour_list_h, "#00870b", linewidth =0.5)
+    axes.plot(bitcoin_4hour_list_l, "#ff0000", linewidth =0.5)
     
     blue_line = mpatches.Patch(color='Blue', label='Open')
     green_line = mpatches.Patch(color='green', label='Highest')
     red_line = mpatches.Patch(color='red', label='Lowest')
     plt.legend(handles=[blue_line, green_line, red_line])
+    plt.style.use("seaborn-darkgrid")
               
     axes.set_title("Bitcoin 4 Hour chart")
     axes.set_ylabel("Price in dollars")
