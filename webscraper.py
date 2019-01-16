@@ -16,8 +16,10 @@ def bitcoin():
     """The webscraper calls realtime price information for cryptocurrencies"""
     bitcoin_historic = []
     bitcoin_list = []
+    fig = plt.figure()
     
     while True:
+        plt.clf()
         scrape = requests.get("https://api.cryptowat.ch/markets/prices")
         scrape_content = html.fromstring(scrape.content)
         scrape_link = scrape_content.xpath("text()")
@@ -42,7 +44,6 @@ def bitcoin():
         if len(bitcoin_historic_set) == 10 or len(bitcoin_historic) >100:
             bitcoin_historic.pop(0)
 
-        fig = plt.figure()
         axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
         axes1.set_title("Bitcoin Price")
         axes1.set_xlabel("Iterations")
@@ -61,7 +62,7 @@ def bitcoin():
         
         axes1.ticklabel_format(useOffset=False, style='plain')
 
-        plt.show()
+        plt.draw()
     
         if allowance < 400000000:
             print("Prices update every 20 seconds")
@@ -81,6 +82,8 @@ def bitcoin():
         elif allowance == 0 or allowance < 0: 
             print("No new requests possible, wait till the hour has passed to start fresh!")
             sleep(60)
+
+        plt.pause(3)
     return 
 
 def ethereum():
@@ -88,8 +91,10 @@ def ethereum():
     """The webscraper calls realtime price information for cryptocurrencies"""
     ethereum_historic = []
     ethereum_list = []
-    
+    fig = plt.figure()
+
     while True:
+        fig.clf()
         scrape = requests.get("https://api.cryptowat.ch/markets/prices")
         scrape_content = html.fromstring(scrape.content)
         scrape_link = scrape_content.xpath("text()")
@@ -114,7 +119,6 @@ def ethereum():
         if len(ethereum_historic_set) == 10 or len(ethereum_historic) >100:
             ethereum_historic.pop(0)
 
-        fig = plt.figure()
         axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
         axes1.set_title("Ethereum Price")
         axes1.set_xlabel("Iterations")
@@ -153,7 +157,8 @@ def ethereum():
         elif allowance == 0 or allowance < 0: 
             print("No new requests possible, wait till the hour has passed to start fresh!")
             sleep(60)
-    
+
+        plt.pause(3)
     return    
     
 def ripple():
@@ -161,8 +166,10 @@ def ripple():
     """The webscraper calls realtime price information for cryptocurrencies"""
     ripple_historic = []
     ripple_list = []
-    
+    fig = plt.figure()
+
     while True:
+        fig.clf()
         scrape = requests.get("https://api.cryptowat.ch/markets/prices")
         scrape_content = html.fromstring(scrape.content)
         scrape_link = scrape_content.xpath("text()")
@@ -191,7 +198,6 @@ def ripple():
         if len(ripple_historic_set) == 10 or len(ripple_historic) >100:
             ripple_historic.pop(0)
 
-        fig = plt.figure()
         axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
         axes1.set_title("Ripple Price")
         axes1.set_xlabel("Iterations")
@@ -230,7 +236,8 @@ def ripple():
         elif allowance == 0 or allowance < 0: 
             print("No new requests possible, wait till the hour has passed to start fresh!")
             sleep(60)
-    
+
+        plt.pause(3)
     return       
     
 def substratum():
@@ -238,8 +245,10 @@ def substratum():
     """The webscraper calls realtime price information for cryptocurrencies"""
     substratum_historic = []
     substratum_list = []
-    
+    fig = plt.figure()
+
     while True:
+        plt.clf()
         scrape = requests.get("https://api.cryptowat.ch/markets/prices")
         scrape_content = html.fromstring(scrape.content)
         scrape_link = scrape_content.xpath("text()")
@@ -268,7 +277,6 @@ def substratum():
         if len(substratum_historic_set) == 10 or len(substratum_historic) >100:
             substratum_historic.pop(0)
 
-        fig = plt.figure()
         axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
         axes1.set_title("Substratum Price")
         axes1.set_xlabel("Iterations")
@@ -308,9 +316,7 @@ def substratum():
             print("No new requests possible, wait till the hour has passed to start fresh!")
             sleep(60)
     
+        plt.pause(3)    
     return           
 
 bitcoin()
-ethereum()
-ripple()
-substratum()
