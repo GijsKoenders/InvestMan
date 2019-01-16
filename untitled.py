@@ -16,6 +16,9 @@ from tkinter import ttk
 import requests
 from lxml import html
 from random import randint
+from time import sleep
+import re
+from matplotlib import pyplot as plt
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -123,30 +126,76 @@ class BTCgraph(tk.Frame):
         button4.pack()
         
         bitcoin_historic = []
-
-        random_start_number = float(randint(3600,4400))
-        bitcoin_historic.append(random_start_number)
-
-        for element in range(0,100):
-            random_new_element = float(randint(-10,10))
-            bitcoin_historic.append(random_new_element + bitcoin_historic[-1])
-        
-        f = Figure(figsize=(5,5), dpi=100)
-        a = f.add_subplot(111)
-        a.plot(bitcoin_historic, "#7f7fff")
-        
-        a.set_title("Bitcoin Simulated Chart")
-        a.set_ylabel("Price in Dollars")
-        a.set_xlabel("Iterations (Updates Every time the app opens!)")
-        
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
-
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
-        toolbar.update()
-        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        bitcoin_list = []
+        fig = plt.figure()
     
+        while True:
+            plt.clf()
+            scrape = requests.get("https://api.cryptowat.ch/markets/prices")
+            scrape_content = html.fromstring(scrape.content)
+            scrape_link = scrape_content.xpath("text()")
+            scrape_link = scrape_link[0]
+    
+            bitcoin_ticker = re.findall(r'coinbase-pro:btc":+\d+\.+\d+', scrape_link) or re.findall(r'coinbase-pro:btcusd":+\d+', scrape_link)  
+            allowance = re.findall(r'remaining":+\d+', scrape_link)
+        
+            bitcoin_price = re.findall(r'\d+\.+\d+', bitcoin_ticker[0]) or re.findall(r'\d+', bitcoin_ticker[0])
+            allowance = re.findall(r'\d+', allowance[0])
+        
+            bitcoin_price = bitcoin_price[0]
+            allowance = allowance[0]
+        
+            bitcoin_price = float(bitcoin_price)
+            allowance = int(allowance)
+            
+            bitcoin_historic.append(bitcoin_price)
+            
+            bitcoin_historic_set = set(bitcoin_historic)
+            
+            if len(bitcoin_historic_set) == 10 or len(bitcoin_historic) >100:
+                bitcoin_historic.pop(0)
+
+            axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
+            axes1.set_title("Bitcoin Price")
+            axes1.set_xlabel("Iterations")
+            axes1.set_ylabel("In Dollars")
+            
+            if bitcoin_historic[-1] not in bitcoin_list:
+                bitcoin_list.append(bitcoin_historic[-1])
+                
+            if len(bitcoin_list) == 1:
+                axes1.plot(bitcoin_historic,"#7f7fff")
+            if len(bitcoin_list) >= 2:
+                if bitcoin_list[-1] > bitcoin_list[-2]:
+                    axes1.plot(bitcoin_historic, color = "#00870b")
+                elif bitcoin_list[-1] < bitcoin_list[-2]:
+                    axes1.plot(bitcoin_historic, color = "#ff0000")
+        
+            axes1.ticklabel_format(useOffset=False, style='plain')
+
+            plt.draw()
+    
+            if allowance < 400000000:
+                print("Prices update every 20 seconds")
+                print("")
+                sleep(20)
+        
+            elif allowance < 1000000000:
+                print("Prices update every 10 seconds")
+                print("")
+                sleep(10)
+        
+            elif allowance < 8000000000:
+                print("Prices update every 5 seconds")
+                print("")
+                sleep(2)
+        
+            elif allowance == 0 or allowance < 0: 
+                print("No new requests possible, wait till the hour has passed to start fresh!")
+                sleep(60)
+                
+            plt.pause(3)
+        
 class BTCgraphminute(tk.Frame):
 
     def __init__(self, parent, controller):
